@@ -17,4 +17,5 @@ TODO:
      Requirements:
      a. Level 0: Is the center.
      b. Level 1: The Main Branches, where the rest of the children will sprout from.
-         After Level 1, the branches should populate the quadrant or partition the level 1 parent is, should cause NO overlap. 
+         After Level 1, the branches should populate the quadrant or partition the level 1 parent is, should cause NO overlap.
+3. Create functionality that would screenshot the graph & export it to an external source.
