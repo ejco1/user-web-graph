@@ -2,9 +2,9 @@ import uuid
 
 
 class User:
-    def __init__(self, name):
+    def __init__(self, name, id=(str(uuid.uuid4())+'_user')):
         self.parent = None
-        self.id = str(uuid.uuid4()) + '_user'
+        self.id = id
         self.name = name
         self.children = []
     
@@ -17,7 +17,6 @@ class User:
         self.children.clear()
     def setParent(self, parent):
         self.parent = parent
-
       
     def createSource(self):
         if self.parent != None:
