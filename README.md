@@ -6,6 +6,7 @@ Clone this repository to your local and run
 
 Once all the dependencies are downloaded, you should be able to run
 > python3 scriptTester.py
+
 Upon running, you'll be able to see the page generated on: http://127.0.0.1:8050/
 
 Because this is using Dash, you're able to update the values & the page will update in real time.
