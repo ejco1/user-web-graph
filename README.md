@@ -11,6 +11,12 @@ Upon running, you'll be able to see the page generated on: http://127.0.0.1:8050
 
 Because this is using Dash, you're able to update the values & the page will update in real time.
 
+To run the test cases on the back-end logic:
+> python -m unittest discover 
+
+If you add more test cases, make sure to also add a file called "__init__.py" to the new module/directory(if you created one)
+No, I don't understand how it works, but it does for some reason.
+
 TODO:
 1. Create functionality to allow external sources to call methods & generate a graph.
 2. Fix the graph to be more concentric.
