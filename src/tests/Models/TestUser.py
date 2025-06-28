@@ -1,6 +1,5 @@
 import unittest
 from src.tests.util.TestCaseUtil import TestCaseUtil
-from src.main.Models.User import User
 
 class TestUser(unittest.TestCase):
 ## This tests that regardless of updates,
