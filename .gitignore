@@ -1,2 +1,11 @@
 __pycache__/User.cpython-313.pyc
 __pycache__/UserNetwork.cpython-313.pyc
+src/__pycache__/__init__.cpython-313.pyc
+src/main/Models/__pycache__/__init__.cpython-313.pyc
+src/main/Models/__pycache__/UserAttributes.cpython-313.pyc
+src/tests/__pycache__/__init__.cpython-313.pyc
+.gitignore
+src/tests/Models/__pycache__/__init__.cpython-313.pyc
+src/tests/Models/__pycache__/TestUserAttributes.cpython-313.pyc
+.gitignore
+src/tests/util/__pycache__/TestCaseUtil.cpython-313.pyc
