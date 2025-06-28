@@ -1,4 +1,5 @@
-import UserAttributes
+from src.main.Models.UserAttributes import UserAttributes
+import json
 
 class User:
     def __init__(self, id=None, name=None, color=None):
@@ -24,15 +25,41 @@ class User:
         self.children.remove(child)
     def clearChildren(self):
         self.children.clear()
+    def getChild(self, childId=None):
+        if len(self.children) == 0:
+            return None
+        elif childId is None:
+            return self.children[0]
+        else:
+            for child in self.children:
+                if childId == child.getField('id'):
+                    return child
+            return None
+    def getAllChildren(self, justIDs=False):
+        listOfChildren = []
+        if len(self.children) == 0:
+            return None
+        else:
+            if justIDs == True:
+                for child in self.children:
+                    listOfChildren.append(child.getField('id'))
+            else:
+                return self.children
+
     def setParent(self, parent):
         self.parent = parent
         self.traverseAndUpdateTree('color', parent.getField('color'))
-    def getParent(self):
-        return self.parent
+    def getParent(self, justID=False):
+        if justID is True and self.parent is not None:
+            return self.parent.getField('id')
+        else:
+            return self.parent
     def getField(self, key):
         return self.fields.getAttribute(key)
+    def getAllFields(self):
+        return self.fields.toString()
     def updateField(self, key, value):
-        self.attributes.updateAttribute(key, value)
+        self.fields.updateAttribute(key, value)
     def traverseAndUpdateTree(self, keyToUpdate=None, valueToUpdate=None):
         listOfUsers = []
         if len(self.children) == 0:
@@ -44,5 +71,10 @@ class User:
                 child.traverseTree(keyToUpdate, valueToUpdate)
         return listOfUsers
     def toString(self):
-        userString = "'User': {allFields}".format(allFields = self.fields)
+        userString = '{}'
+        justIDs = True
+        data = json.loads(userString)
+        data['User'] = json.loads(self.getAllFields())
+        data['ParentID'] = self.getParent(justIDs)
+        data['Children'] = self.getAllChildren(justIDs)
         return userString

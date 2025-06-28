@@ -3,15 +3,25 @@ from src.tests.util.TestCaseUtil import TestCaseUtil
 from src.main.Models.UserAttributes import UserAttributes
 
 class TestUserAttributes(unittest.TestCase):
+## This tests that regardless of updates,
+# These values will always exist.
+    def test_SchemaValues(self):
+        testFieldsObject = UserAttributes()
+        testFields = TestCaseUtil.loadAsJSON(testFieldsObject.toString())
+        self.assertIn("id", testFields)
+        self.assertIn("name", testFields)
+        self.assertIn("color", testFields)
+        self.assertIn("extraAttributes", testFields)
+    
+    def test_basicFieldsReturn(self):
+        samplePayload = TestCaseUtil.generateAttributesPayload()
+        userAttributes = UserAttributes()
+        userAttributes.updateAttribute('id', samplePayload['id'])
+        userAttributes.updateAttribute('name', samplePayload['name'])
+        userAttributes.updateAttribute('color', samplePayload['color'])
+        userAttributes.updateAttribute('waa', samplePayload['extraAttributes']['waa'])
 
-    def test_PayloadPrint(self):
-        payloadString = TestCaseUtil.generateAttributesPayload()
-        testFields = UserAttributes()
-        testFields.updateAttribute('id', 'test123')
-        testFields.updateAttribute('name', 'Ethan')
-        testFields.updateAttribute('color', 'blue')
-        testFields.updateAttribute('waa', 'wee')
-        self.assertEqual(payloadString, testFields.printAttributes())
+        self.assertEqual(userAttributes.toString(), TestCaseUtil.loadAsStr(samplePayload))
 
 if __name__ == '__main__':
     unittest.main()
