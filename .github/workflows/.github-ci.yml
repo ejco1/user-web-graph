@@ -1,0 +1,44 @@
+name: Pushing to
+on: 
+  push:
+    branches:
+      - 'feature/**'
+
+env:
+  DEPLOY_ENV: 'dev'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install ruff
+      - run: ruff check .
+  
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install coverage
+    - name: Show Total Coverage Percentage
+      run: |
+        coverage run -m unittest discover -s src/tests -p "*.py"
+        coverage report | tail -n 1 | awk '{print "Total coverage - "$NF}'
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Deploying to $DEPLOY_ENV"
+
+

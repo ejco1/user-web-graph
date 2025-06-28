@@ -40,7 +40,7 @@ class User:
         if len(self.children) == 0:
             return None
         else:
-            if justIDs == True:
+            if justIDs:
                 for child in self.children:
                     listOfChildren.append(child.getField('id'))
             else:

@@ -1,0 +1,10 @@
+.DS_Store
+
+.gitignore
+.git
+.github/
+.github/workflows/
+.env
+.vscode
+README.md
+__pycache__
