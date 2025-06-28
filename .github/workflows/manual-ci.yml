@@ -47,7 +47,7 @@ jobs:
 
   bump_tag:
     if: ${{ inputs.CREATE_RELEASE != 'no' && github.ref == 'refs/heads/main' }}
-    runs-on: ubunutu-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
