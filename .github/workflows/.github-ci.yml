@@ -12,10 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
       - run: pip install ruff
       - run: ruff check .
   
@@ -26,9 +22,11 @@ jobs:
       matrix:
         python-version: [3.9, 3.10, 3.11]
     steps:
-    - name: List repo root
-      run: ls -al
-    - run: pip install -r ./requirements.txt
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - run: pip install -r requirements.txt
     - name: Run Unit Tests
       run: python -m unittest discover -s src/tests -p "*.py"
     - name: Show Total Coverage Percentage
