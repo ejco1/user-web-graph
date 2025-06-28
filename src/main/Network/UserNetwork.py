@@ -1,10 +1,9 @@
-import src.main.Models.User as User
 from dash import Dash, html
 import dash_cytoscape as cyto
 
 class UserNetwork:
     def createSource(self, user):
-        if user.parent != None:
+        if user.parent is not None:
             sourceString = {'data': {'source': user.parent.id, 'target': user.id}, 'classes': user.parent.color}
             return sourceString
     def createNode(self, user):
@@ -16,7 +15,7 @@ class UserNetwork:
         if len(user.children) == 0:
             sourceString = self.createSource(user)
             nodeString = self.createNode(user)
-            if(sourceString != None):
+            if(sourceString is not None):
                 elementsArray.append(sourceString)
             elementsArray.append(nodeString)
             return elementsArray
