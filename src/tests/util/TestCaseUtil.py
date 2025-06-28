@@ -12,20 +12,26 @@ class TestCaseUtil:
         }
         payloadString = json.dumps(payload)
         return payloadString
-    def createSampleTree(treeId, treeColor, numberOfNodes):
-        parentId = "{t}_userId".format(t = treeId)
-        parentName = "{t}_userName".format(t = treeId)
-        parentUser = User(parentId, parentName, treeColor)
+    def createSampleTree(treeId=None, treeColor=None, numberOfNodes=None):
+        parentUser = TestCaseUtil.createSampleUser(treeId, None, treeColor)
 
         lastKnownUser = parentUser
         for childNumber in range(numberOfNodes):
-            choice = random.randint(0, 3)
+            choice = random.randint(0, 1)
             if choice == 0:
-                lastKnownUser = User("{t}_userId_child{i}".format(t = treeId, i = childNumber))
+                lastKnownUser = TestCaseUtil.createSampleUser(treeId, childNumber)
                 parentUser.addChild(lastKnownUser)
             if choice == 1:
-                lastKnownUser.addChild()
+                tempUser = TestCaseUtil.createSampleUser(treeId, childNumber)
+                lastKnownUser.addChild(tempUser)
+                lastKnownUser = tempUser
+        return parentUser
 
+    def createSampleUser(id, number=None, color=None):
+        value = number
+        if value is None:
+            value = "parent"
+        return User("{t}_userId_{i}".format(t = id, i = value), "{t}_userName_{i}".format(t = id, i = value), color)
 
 
     def generateAttributesPayload():

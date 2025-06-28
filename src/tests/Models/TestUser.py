@@ -3,13 +3,20 @@ from src.tests.util.TestCaseUtil import TestCaseUtil
 from src.main.Models.User import User
 
 class TestUser(unittest.TestCase):
+## This tests that regardless of updates,
+# The parent will see its child, and the child will see its parent.
+# The child will also share the same color, unless specified otherwise(Which the child did not specify here)
     def test_SchemaValues(self):
-        testUser = User()
-        testChild = User()
-        testUserId = testUser.getField('id')
-        testChildId = testChild.getField('id')
+        parentUser = TestCaseUtil.createSampleTree("abc123", "blue", 1)
+        childUser = parentUser.getChild()
 
-        testUser.addChild(testChild)
-        testChild = User()
-        self.assertNotEqual
-        
+        self.assertEqual(parentUser.getField('color'), childUser.getField('color'))
+        self.assertEqual(childUser.getParent(True), parentUser.getField('id'))
+    def test_inJSONFormat(self):
+        parentUser = TestCaseUtil.createSampleTree("abc123", "green", 3)
+        parentString = parentUser.toString()
+        try:
+            TestCaseUtil.loadAsJSON(parentString)
+            self.assertTrue(True)
+        except TypeError as e:
+            self.assertFalse(False, e)

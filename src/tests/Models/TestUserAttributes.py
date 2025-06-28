@@ -7,7 +7,7 @@ class TestUserAttributes(unittest.TestCase):
 # These values will always exist.
     def test_SchemaValues(self):
         testFieldsObject = UserAttributes()
-        testFields = TestCaseUtil.loadAsJSON(testFieldsObject.printAttributes())
+        testFields = TestCaseUtil.loadAsJSON(testFieldsObject.toString())
         self.assertIn("id", testFields)
         self.assertIn("name", testFields)
         self.assertIn("color", testFields)
@@ -21,7 +21,7 @@ class TestUserAttributes(unittest.TestCase):
         userAttributes.updateAttribute('color', samplePayload['color'])
         userAttributes.updateAttribute('waa', samplePayload['extraAttributes']['waa'])
 
-        self.assertEqual(userAttributes.printAttributes(), TestCaseUtil.loadAsStr(samplePayload))
+        self.assertEqual(userAttributes.toString(), TestCaseUtil.loadAsStr(samplePayload))
 
 if __name__ == '__main__':
     unittest.main()

@@ -29,7 +29,7 @@ class UserAttributes:
             self.color = value
         elif key is not None:
             self.__addExtraAttribute(key, value)
-    def printAttributes(self):
+    def toString(self):
         attributes = '{}'
         data = json.loads(attributes)
         data['id'] = self.getAttribute('id')
