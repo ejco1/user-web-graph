@@ -36,6 +36,8 @@ jobs:
       matrix:
         python-version: [3.9, 3.10, 3.11]
     steps:
+    - name: List repo root
+      run: ls -al
     - run: pip install -r ./requirements.txt
     - name: Run Unit Tests
       run: python -m unittest discover -s src/tests -p "*.py"
