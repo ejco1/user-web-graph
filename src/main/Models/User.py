@@ -24,6 +24,17 @@ class User:
         self.children.remove(child)
     def clearChildren(self):
         self.children.clear()
+    def getChild(self, childId=None):
+        if len(self.children) == 0:
+            return None
+        elif childId is None:
+            return self.children[0]
+        else:
+            for child in self.children:
+                if childId == child.getField('id'):
+                    return child
+            return self.children[0]
+            
     def setParent(self, parent):
         self.parent = parent
         self.traverseAndUpdateTree('color', parent.getField('color'))

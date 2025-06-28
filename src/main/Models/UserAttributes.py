@@ -13,7 +13,7 @@ class UserAttributes:
         elif key == 'name':
             return self.name
         elif key == 'color':
-            return str(self.color)
+            return self.color
         else:
             return self.extraAttributes
     def __addExtraAttribute(self, key, value):
