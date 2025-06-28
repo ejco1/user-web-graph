@@ -41,7 +41,9 @@ jobs:
         pip install -r requirements.txt
         pip install coverage
     - name: Show Total Coverage Percentage
-      run: coverage report | tail -n 1 | awk '{print "Total coverage - "$NF}'
+      run: |
+        coverage run -m unittest discover -s src/tests -p "*.py"
+        coverage report | tail -n 1 | awk '{print "Total coverage - "$NF}'
 
   bump_tag:
     if: ${{ inputs.CREATE_RELEASE != 'No' && github.ref == 'refs/heads/main' }}
