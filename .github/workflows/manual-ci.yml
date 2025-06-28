@@ -1,0 +1,81 @@
+name: Deploy New Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      CREATE_RELEASE:
+        description: "Only select patch type from main, if branch stay on No."
+        required: true
+        default: No
+        type: choice
+        options: [major, minor, patch, No]
+      DEPLOY_ENV:
+        description: "Even though this is just pretend, select an environment."
+        required: true
+        default: dev
+        type: choice
+        options: [dev, qa, prod]
+jobs:
+  lint:
+    if: ${{ inputs.CREATE_RELEASE == 'No' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install ruff
+      - run: ruff .
+  
+  test:
+    if: ${{ inputs.CREATE_RELEASE == 'No' }}
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11]
+    steps:
+    - run: pip install -r requirements.txt
+    - name: Run Unit Tests
+      run: python -m unittest discover -s src/tests -p "*.py"
+    - name: Show Total Coverage Percentage
+      run: coverage report | tail -n 1 | awk '{print "Total coverage: "$NF}'
+
+  bump_tag:
+    if: ${{ inputs.CREATE_RELEASE != 'No' && github.ref == 'refs/heads/main' }}
+    runs-on: ubunutu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Bump & Push Tag
+        id: bump
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: ${{ inputs.CREATE_RELEASE}}
+
+  deploy_prod:
+    if: ${{ startsWith(github.ref, 'refs/tags/') && inputs.DEPLOY_ENV == 'prod' }}
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Deploying to ${{ inputs.DEPLOY_ENV }}"
+  
+  deploy_qa:
+    if: ${{ inputs.DEPLOY_ENV == 'qa' }}
+    needs: bump_tag
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Deploying to ${{ inputs.DEPLOY_ENV }}"
+  
+  deploy_dev:
+    if: ${{ inputs.DEPLOY_ENV == 'dev' }}
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Deploying to ${{ inputs.DEPLOY_ENV }}"
+  
