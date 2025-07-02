@@ -1,75 +1,52 @@
 from dash import Dash, html
 import dash_cytoscape as cyto
+import json
 
 class UserNetwork:
-    def createSource(self, user):
-        if user.parent is not None:
-            sourceString = {'data': {'source': user.parent.id, 'target': user.id}, 'classes': user.parent.color}
+### Format: {'data': {'source': user.parent.id, 'target': user.id}}
+    def createSource(userString):
+        userJSON = json.loads(userString)
+        dataObj = json.loads('{}') 
+        sourceJSON = json.loads('{}')
+        userDataJSON = userJSON['User']
+        dataObj['source'] = userJSON['ParentID']
+        dataObj['target'] = userDataJSON['id']
+        sourceJSON['data'] = dataObj
+        sourceString = json.dumps(sourceJSON)
+        if userJSON['ParentID'] is not None:
             return sourceString
-    def createNode(self, user):
-        nodeString = {'data': {'id': user.id, 'label': user.name}, 'classes': user.color}
+### Format: {'data': {'id': user.id, 'label': user.name}}             
+    def createNode(userString):
+        userJSON = json.loads(userString)
+        emptyString = '{}'
+        dataObj = json.loads(emptyString) 
+        nodeJSON = json.loads(emptyString)
+        userDataJSON = json.loads(emptyString)
+        userDataJSON = userJSON['User']
+        dataObj['id'] = userDataJSON['id']
+        dataObj['label'] = userDataJSON['name']
+        nodeJSON['data'] = dataObj
+        nodeString = json.dumps(nodeJSON)
         return nodeString
-    
-    def generateElements(self, user):
+    def generateElements(self, userArray):
         elementsArray = []
-        if len(user.children) == 0:
+        for user in userArray:
             sourceString = self.createSource(user)
             nodeString = self.createNode(user)
             if(sourceString is not None):
                 elementsArray.append(sourceString)
             elementsArray.append(nodeString)
-            return elementsArray
-        else:
-            child = user.children.pop() # Decrement Children by 1.
-            elementsArray += self.generateElements(child) # Recursive Call.
-            elementsArray += self.generateElements(user) # Recurses itself to see if Node has more children.
-            return elementsArray
+        return elementsArray
 
-    def generateGraph(self, user):
+    def generateGraph(self, userArray):
         app = Dash(__name__)
         app.layout = html.Div([
         html.P("User Network"),
         cyto.Cytoscape(id='cytoscape',
-                   elements=self.generateElements(user),
+                   elements=self.generateElements(userArray),
         layout={'name': 'concentric', 'minNodeSpacing': 30, 'sweep': 5, 'equidistant': False, 'spacingFactor': 2},
         style={'width': '1920px', 'height': '1080px', 'curve-style': 'bezier'},
-        stylesheet=[
-            {
-                'selector': '.red',
-                'style': {
-                    'background-color': 'red',
-                    'line-color': 'red'
-                }
-            },
-             {
-                'selector': '.blue',
-                'style': {
-                    'background-color': 'blue',
-                    'line-color': 'blue'
-                }
-            },
-             {
-                'selector': '.black',
-                'style': {
-                    'background-color': 'black',
-                    'line-color': 'black'
-                }
-            },
-             {
-                'selector': '.yellow',
-                'style': {
-                    'background-color': 'yellow',
-                    'line-color': 'yellow'
-                }
-            },
-             {
-                'selector': '.green',
-                'style': {
-                    'background-color': 'green',
-                    'line-color': 'green'
-                }
-            }
-        ]
+        stylesheet=[]
         )
         ])
         app.run(debug=True)
