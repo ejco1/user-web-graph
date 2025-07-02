@@ -70,6 +70,7 @@ class User:
             for child in self.children:
                 child.traverseTree(keyToUpdate, valueToUpdate)
         return listOfUsers
+### { User: { id: ..., name: ..., color: ..., extraAttributes: {} }, ParentID: {}, Children: {} }
     def toString(self):
         userString = '{}'
         justIDs = True
@@ -77,4 +78,5 @@ class User:
         data['User'] = json.loads(self.getAllFields())
         data['ParentID'] = self.getParent(justIDs)
         data['Children'] = self.getAllChildren(justIDs)
+        userString = json.dumps(data)
         return userString
