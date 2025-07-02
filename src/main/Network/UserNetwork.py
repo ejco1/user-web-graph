@@ -1,5 +1,4 @@
 from dash import Dash, html
-from src.main.Models.User import User
 import dash_cytoscape as cyto
 import json
 
