@@ -30,6 +30,7 @@ class UserNetwork:
         dataObj['color'] = userDataJSON['color']
         nodeJSON['data'] = dataObj
         return nodeJSON
+      
     def generateElements(self, userArray):
         elementsArray = []
         for user in userArray:
