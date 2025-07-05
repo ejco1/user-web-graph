@@ -2,21 +2,23 @@ from dash import Dash, html
 import dash_cytoscape as cyto
 import json
 
+### This is a sample class used to see how one can transform the data to match
+### necessary values for whichever library you use to visualize a tree.
 class UserNetwork:
 ### Format: {'data': {'source': user.parent.id, 'target': user.id}}
-    def createSource(userString):
+    def createSource(self, userString):
         userJSON = json.loads(userString)
         dataObj = json.loads('{}') 
         sourceJSON = json.loads('{}')
         userDataJSON = userJSON['User']
         dataObj['source'] = userJSON['ParentID']
         dataObj['target'] = userDataJSON['id']
+        dataObj['color'] = userDataJSON['color']
         sourceJSON['data'] = dataObj
-        sourceString = json.dumps(sourceJSON)
         if userJSON['ParentID'] is not None:
-            return sourceString
+            return sourceJSON
 ### Format: {'data': {'id': user.id, 'label': user.name}}             
-    def createNode(userString):
+    def createNode(self, userString):
         userJSON = json.loads(userString)
         emptyString = '{}'
         dataObj = json.loads(emptyString) 
@@ -25,9 +27,9 @@ class UserNetwork:
         userDataJSON = userJSON['User']
         dataObj['id'] = userDataJSON['id']
         dataObj['label'] = userDataJSON['name']
+        dataObj['color'] = userDataJSON['color']
         nodeJSON['data'] = dataObj
-        nodeString = json.dumps(nodeJSON)
-        return nodeString
+        return nodeJSON
     def generateElements(self, userArray):
         elementsArray = []
         for user in userArray:
@@ -46,7 +48,21 @@ class UserNetwork:
                    elements=self.generateElements(userArray),
         layout={'name': 'concentric', 'minNodeSpacing': 30, 'sweep': 5, 'equidistant': False, 'spacingFactor': 2},
         style={'width': '1920px', 'height': '1080px', 'curve-style': 'bezier'},
-        stylesheet=[]
+        stylesheet=[
+                {
+                'selector': 'node',
+                    'style': {
+                        'content': 'data(label)',
+                        'background-color': 'data(color)'
+                    }
+                },
+                {
+                'selector': 'edge',
+                    'style': {
+                        'line-color': 'data(color)'
+                    }
+                }
+        ]
         )
         ])
         app.run(debug=True)

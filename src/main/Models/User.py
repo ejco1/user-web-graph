@@ -59,16 +59,17 @@ class User:
     def getAllFields(self):
         return self.fields.toString()
     def updateField(self, key, value):
-        self.fields.updateAttribute(key, value)
+        self.fields.updateAttribute(key, value) # Should set a thing, if it's color, traverse/update tree
     def traverseAndUpdateTree(self, keyToUpdate=None, valueToUpdate=None):
         listOfUsers = []
+        if keyToUpdate is not None:
+            self.updateField(keyToUpdate, valueToUpdate)
         if len(self.children) == 0:
-            if keyToUpdate is not None:
-                self.updateField(keyToUpdate, valueToUpdate)
             listOfUsers.append(self)
         else:
             for child in self.children:
-                child.traverseTree(keyToUpdate, valueToUpdate)
+                listOfUsers.extend(child.traverseAndUpdateTree(keyToUpdate, valueToUpdate))
+            listOfUsers.append(self)
         return listOfUsers
 ### { User: { id: ..., name: ..., color: ..., extraAttributes: {} }, ParentID: {}, Children: {} }
     def toString(self):
