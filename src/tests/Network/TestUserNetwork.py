@@ -7,14 +7,12 @@ class TestUserNetwork(unittest.TestCase):
 ## Users must map all of their attributes to the data object.
     def test_UserMapsMandatoryDetailsToNodesAndSources(self):
         parentUser = TestCaseUtil.createSampleTree("abc123", "blue", 2)
+        sampleNetwork = UserNetwork()
         childUser = parentUser.getChild()
-        nodeDataString = UserNetwork.createNode(childUser.toString())
-        sourceDataString = UserNetwork.createSource(childUser.toString())
+        nodeDataObjects = sampleNetwork.createNode(childUser.toString())
+        sourceDataObject = sampleNetwork.createSource(childUser.toString())
 
-        nodeDataObjects = TestCaseUtil.loadAsJSON(nodeDataString)
         nodeData = nodeDataObjects['data']
-
-        sourceDataObject = TestCaseUtil.loadAsJSON(sourceDataString)
         sourceData = sourceDataObject['data']
 
         self.assertEqual(nodeData['id'], childUser.getField('id'))
