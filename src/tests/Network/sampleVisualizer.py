@@ -1,5 +1,4 @@
 from src.main.Network.UserNetwork import UserNetwork
-from src.main.Models.User import User
 from src.tests.util.TestCaseUtil import TestCaseUtil
 
 ##Try it yourself! -- run "python3 -m src.tests.Network.sampleVisualizer"
